@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<style>
+    .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    table th, table td {
+        vertical-align: middle !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2 class="display-6">Add Airport Route</h2>
+            <p class="text-muted">Add new routes and view all existing routes</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Add New Route</h5>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <div class="row">
+                    {% for field in route_form %}
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="submit" class="btn btn-success">Save Route</button>
+                <a href="{% url 'home' %}" class="btn btn-secondary ms-2">Back to Home</a>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Existing Routes</h5>
+        </div>
+        <div class="card-body p-0">
+            {% if routes %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Sl. No</th>
+                                <th>From Airport</th>
+                                <th>To Airport</th>
+                                <th>Position</th>
+                                <th>parent</th>
+                                <th>Duration (mins)</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for route in routes %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ route.from_airport }}</td>
+                                    <td>{{ route.to_airport }}</td>
+                                    <td>{{ route.get_position_display }}</td>
+                                    <td>{{ route.parent|default_if_none:"" }}</td>
+                                    <td>{{ route.duration }}</td>
+                                    <td class="text-center">
+                                        <form method="post" action="{% url 'delete_route' pk=route.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-sm btn-secondary"
+                                                onclick="return confirm('Are you sure you want to delete');">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="p-3 text-center text-muted">No routes added yet</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

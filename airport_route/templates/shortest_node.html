@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<style>
+    .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    .result-highlight {
+        background-color: #f8f9fa;
+        border-left: 4px solid #0d6efd;
+        padding: 10px 15px;
+        border-radius: 6px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h2 class="display-6">Find Shortest Path Between Airports</h2>
+            <p class="text-muted">Select two airports to find the shortest route based on total duration</p>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-header bg-dark text-white">
+            <h5 class="mb-0">Shortest Route Finder</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" class="row">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger small">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.from_airport.id_for_label }}" class="form-label">{{ form.from_airport.label }}</label>
+                    {{ form.from_airport }}
+                    {% if form.from_airport.errors %}
+                        <div class="text-danger small">{{ form.from_airport.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.to_airport.id_for_label }}" class="form-label">{{ form.to_airport.label }}</label>
+                    {{ form.to_airport }}
+                    {% if form.to_airport.errors %}
+                        <div class="text-danger small">{{ form.to_airport.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="col-12 mt-2">
+                    <button type="submit" class="btn btn-success">Find Shortest Path</button>
+                    <a href="{% url 'home' %}" class="btn btn-secondary ms-2">Back to Home</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if result %}
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Result</h5>
+        </div>
+        <div class="card-body">
+            <div class="result-highlight">
+                <h5 class="text-success mb-1">
+                    Shortest Route: <span class="fw-bold">{{ result.path_display }}</span>
+                </h5>
+                <p class="text-muted mb-0">
+                    Total Duration: <strong>{{ result.total_duration }} mins</strong> <br>
+                    Hops: <strong>{{ result.num_hops }}</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if path %}
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Route Traversal Details</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Step</th>
+                            <th>From Airport</th>
+                            <th>To Airport</th>
+                            <th>Position</th>
+                            <th>Duration (mins)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for node in path %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ node.from_airport }}</td>
+                            <td>{{ node.to_airport }}</td>
+                            <td class="text-capitalize">{{ node.position }}</td>
+                            <td>{{ node.duration }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

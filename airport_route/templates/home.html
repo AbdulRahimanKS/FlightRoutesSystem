@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block style %} 
+
+<style>
+    .card {
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="display-4">Flight Routes System</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Overview</h5>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-4">
+                        <h3 class="text-primary">{{ total_airports }}</h3>
+                        <p class="text-muted">Total Airports</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 class="text-secondary">{{ total_routes }}</h3>
+                        <p class="text-muted">Total Routes</p>
+                    </div>
+                    <div class="col-md-4">
+                        {% if longest_route %}
+                            <h5 class="text-success">
+                                {{ longest_route.from_airport.name }} ({{ longest_route.from_airport.code }})
+                                <i class="bi bi-arrow-right"></i>
+                                {{ longest_route.to_airport.name }} ({{ longest_route.to_airport.code }})
+                            </h5>
+                            <p class="text-muted mb-0">
+                                Duration: <strong>{{ longest_route.duration }} mins</strong> ({{ longest_route.get_position_display }})
+                            </p>
+                        {% else %}
+                            <p class="text-muted">No routes available</p>
+                        {% endif %}
+                        <p class="text-muted">Longest Route</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4 mt-4">
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-plus-circle"></i> Add Airport
+                </h5>
+                <p class="card-text">
+                    Add a new airport to the system
+                </p>
+                <a href="{% url 'add_airport' %}" class="btn btn-dark" style="background-color: #6c757d; border-color: #666;">Add / View Airports</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-plus-circle"></i> Add Airport Route
+                </h5>
+                <p class="card-text">
+                    Create a new route between two airports
+                </p>
+                <a href="{% url 'add_route' %}" class="btn btn-dark" style="background-color: #6c757d; border-color: #666;">Add / View Airport Routes</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-search"></i> Find Nth Node
+                </h5>
+                <p class="card-text">
+                    Search for the Nth left or right node from a starting airport
+                </p>
+                <a href="{% url 'search_nth_node' %}" class="btn btn-dark" style="background-color: #6c757d; border-color: #666;">Search Node</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <i class="bi bi-signpost-split"></i> Shortest Path
+                </h5>
+                <p class="card-text">
+                    Find the shortest path between two airports based on total duration
+                </p>
+                <a href="{% url 'shortest_node' %}" class="btn btn-dark" style="background-color: #6c757d; border-color: #666;">Find Path</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
