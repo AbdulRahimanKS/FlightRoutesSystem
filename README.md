@@ -1,16 +1,16 @@
 # Flight Routes System
 
-This is a **Flight Routes System** built using **Python 3.12** and  **Django** . It implements a binary tree data structure to manage airport connections, allowing efficient route management, path finding. The system supports operations like finding the Nth node, longest route by duration, and shortest path between airports.
+This is a **Flight Routes System** built using **Python 3.12** and  **Django** . It implements a directed graph structure with positional routing to manage airport connections, allowing efficient route management and pathfinding. Each airport can connect to other airports via left or right positioned routes, enabling structured navigation through the flight network.
 
 ---
 
 ## Features
 
-* **Binary Tree Structure** : Airports organized as nodes with left/right child relationships
+* **Positional Route Structure** : Airports organized with left/right route positioning for directional navigation
 * **Route Management** : Create and manage flight routes with duration tracking
 * **Nth Node Search** : Find the Nth left or right node from any starting airport
 * **Longest Route Detection** : Identify routes with maximum flight duration
-* **Shortest Path Algorithm** : BFS-based pathfinding between any two airports
+* **Shortest Path Algorithm** : BFS-based pathfinding to find the shortest path (by total duration) between any two airports
 
 ---
 
