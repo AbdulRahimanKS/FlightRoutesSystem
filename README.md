@@ -57,14 +57,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 5. Apply database migrations
-
-```bash
-python manage.py makemigrations
-python manage.py migrate
-```
-
-### 6. Run the Django development server
+### 5. Run the Django development server
 
 ```bash
 python manage.py runserver
@@ -87,8 +80,6 @@ python manage.py runserver
 
 ---
 
-
-
 ## Credentials
 
 Since the database is pushed, you can use superadmin credentials:
@@ -109,7 +100,7 @@ Since the database is pushed, you can use superadmin credentials:
 
 ### 2. Add Airport
 
-Form to reate new airports in the system
+Form to create new airports in the system
 
 Fields:
 
